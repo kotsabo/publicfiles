@@ -1,14 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Cloudflare Turnstile Test</title>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  </head>
-  <body>
-    <form action="/submit" method="POST">
-      <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="light"></div>
-      <br />
-      <button type="submit">Submit</button>
-    </form>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Turnstile CAPTCHA Test</title>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <h2>Cloudflare Turnstile Manual CAPTCHA</h2>
+
+  <form id="myForm" action="#" method="POST" onsubmit="return validateCaptcha();">
+    <div class="cf-turnstile"
+         data-sitekey="1x00000000000000000000AA"
+         data-callback="onCaptchaSuccess"
+         data-expired-callback="onCaptchaExpired"
+         data-error-callback="onCaptchaError">
+    </div>
+
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    let captchaPassed = false;
+
+    function onCaptchaSuccess(token) {
+      captchaPassed = true;
+      console.log("CAPTCHA passed:", token);
+    }
+
+    function onCaptchaExpired() {
+      captchaPassed = false;
+      console.warn("CAPTCHA expired");
+    }
+
+    function onCaptchaError() {
+      captchaPassed = false;
+      console.error("CAPTCHA error");
+    }
+
+    function validateCaptcha() {
+      if (!captchaPassed) {
+        alert("Please complete the CAPTCHA before submitting.");
+        return false;
+      }
+      return true;
+    }
+  </script>
+</body>
 </html>
